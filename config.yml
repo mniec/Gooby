@@ -1,0 +1,14 @@
+name: Franek
+
+localIP: 127.0.0.1
+multicastIP: 225.1.1.54
+
+multicastTTL: 2
+
+udpPort: 2324
+multicastPort: 78898
+tcpPort: 6655
+
+logConfig: logger.conf
+
+packetLength: 5000
