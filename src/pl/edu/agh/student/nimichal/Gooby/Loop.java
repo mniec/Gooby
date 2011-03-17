@@ -7,6 +7,12 @@ import pl.edu.agh.student.nimichal.Gooby.Model.Model;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 import pl.edu.agh.student.nimichal.Gooby.Model.StringMessage;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -26,9 +32,9 @@ public class Loop {
     private InetAddress multiAddr;
 
     private DatagramSocket udpSock;
-    private Socket tcpSock;
 
-    private ByteBuffer buffer;
+    private ServerSocket tcpServerSock;
+    private Socket tcpSock;
 
     public Loop() {
 
@@ -48,6 +54,11 @@ public class Loop {
             udpSock.setSoTimeout(Settings().getTimeout());
             udpSock.setReuseAddress(true);
 
+            tcpServerSock = new ServerSocket(Settings().getTcpPort());
+            tcpServerSock.setSoTimeout(Settings().getTimeout());
+            tcpSock = new Socket();
+            tcpSock.setSoTimeout(Settings().getTimeout());
+
         } catch (IOException e) {
             logger.fatal("Cannot create multicast socket", e);
             System.exit(1);
@@ -62,7 +73,7 @@ public class Loop {
         sendMulticast(message);
     }
 
-    private DatagramPacket receive() {
+    private Message receive() {
         DatagramPacket packet = MessageFactory.getPacket();
         packet.setPort(Settings().getMulticastPort());
 
@@ -70,15 +81,24 @@ public class Loop {
             try {
                 try {
                     udpSock.receive(packet);
-                    return packet;
+                    return MessageFactory.formByte(packet.getData(), packet.getLength());
                 } catch (SocketTimeoutException e) {
 
                 }
                 try {
                     multiSock.receive(packet);
-                    return packet;
+                    return MessageFactory.formByte(packet.getData(), packet.getLength());
                 } catch (SocketTimeoutException e) {
                 }
+
+                try {
+                    byte[] buff =  MessageFactory.getBuffer();
+                    Socket sock =  tcpServerSock.accept();
+                    new DataInputStream(sock.getInputStream()).read(buff);
+                    return  MessageFactory.formByte(buff,buff.length);
+                } catch (SocketTimeoutException e) {
+                }
+
 
                 Thread.sleep(10);
             } catch (IOException e) {
@@ -95,9 +115,8 @@ public class Loop {
 
     public void mainLoop() {
         while (true) {
-            DatagramPacket packet = receive();
-            Message response = MessageFactory.formByte(packet.getData(), packet.getLength());
 
+            Message response = receive();
 
             if (response.getClient().equals(Model.getModel().getThisClient()))
                 continue;
@@ -116,6 +135,8 @@ public class Loop {
                 handle((StringMessage) response);
             else if (response instanceof LeaveRoom)
                 handle((LeaveRoom) response);
+            else if (response instanceof AckMessage)
+                handle((AckMessage) response);
 
         }
     }
@@ -146,7 +167,23 @@ public class Loop {
 
             multiSock.send(packet);
         } catch (IOException e) {
-            logger.fatal("Error durring sending multicast!", e);
+            logger.fatal("Error durring sending UDP!", e);
+            System.exit(1);
+        }
+    }
+
+    public void sendTCP(Message message, String addr, int port){
+        try {
+
+            tcpSock.connect(InetSocketAddress.createUnresolved(addr,port));
+
+            logger.debug("Sending TCP message:" + message.toString());
+
+            new DataOutputStream(tcpSock.getOutputStream()).write(message.toBytes());
+            tcpSock.close();
+
+        } catch (IOException e) {
+            logger.fatal("Error durring sending TCP!", e);
             System.exit(1);
         }
     }
@@ -174,6 +211,7 @@ public class Loop {
 
     private void handle(StringMessage message) {
         Model.getModel().addMessage(message);
+        sendUDP(MessageFactory.createAckMessage(message), message.getClient().getIpAddress(), message.getClient().getUDPPort());
         Model.getModel().updateGUI();
     }
 
@@ -183,15 +221,39 @@ public class Loop {
         Model.getModel().updateGUI();
     }
 
+    private void handle(AckMessage response) {
+        StringMessage.find(response.getMessage()).getRecipientsLeft().remove(Client.find(response.getClient()));
+    }
+
+
     //Functions
     public void sendMessage(String message) {
         StringMessage msg = MessageFactory.createSendMessage(message);
         Model.getModel().addMessage(msg);
-        for(Client client:msg.getRecipientsLeft()){
-            sendUDP(msg,client.getIpAddress(),client.getUDPPort());
+        for (Client client : msg.getRecipientsLeft()) {
+            sendUDP(msg, client.getIpAddress(), client.getUDPPort());
         }
+
+        int delay = 1000; //milliseconds
+
+        new Timer(Settings().getTimeToReceiveResponse(), new TCPCorrector(msg)).start();
+
         Model.getModel().updateGUI();
     }
+
+    public class TCPCorrector implements ActionListener{
+        private StringMessage msg;
+        public TCPCorrector(StringMessage msg){
+            this.msg = msg;
+        }
+        public void actionPerformed(ActionEvent actionEvent) {
+            for(Client client:msg.getRecipientsLeft()){
+                sendTCP(msg,msg.getClient().getIpAddress(),msg.getClient().getTCPPort());
+                msg.getRecipientsLeft().remove(client);
+            }
+        }
+    }
+
 
     public void createRoom(Room room) {
 
@@ -201,7 +263,6 @@ public class Loop {
     }
 
     public void joinRoom(Room room) {
-
         Model.getModel().setCurrentRoom(room);
         sendMulticast(MessageFactory.createJoinRoomMsg(room));
         Model.getModel().updateGUI();

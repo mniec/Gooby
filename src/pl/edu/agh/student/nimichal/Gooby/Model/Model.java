@@ -51,8 +51,8 @@ public class Model {
 
     public void addClient(Client client) {
 
-        for(Room room:client.getRooms()){
-            if(!rooms.contains(room)){
+        for (Room room : client.getRooms()) {
+            if (!rooms.contains(room)) {
                 addRoom(room);
             }
         }
@@ -83,34 +83,33 @@ public class Model {
     }
 
     public Client getThisClient() {
-        if(thisClient==null){
+        if (thisClient == null) {
             thisClient = new Client();
             thisClient.setIpAddress(Settings.Settings().getLocalIP());
             thisClient.setName(Settings.Settings().getName());
             thisClient.setCurrentRoom(currentRoom);
             thisClient.setRooms(rooms);
             thisClient.setUDPPort(Settings.Settings().getUdpPort());
-
+            thisClient.setTCPPort(Settings.Settings().getTcpPort());
         }
         return thisClient;
     }
 
-
     //listeners
-    public void addChatListener(ChatListener listener){
+    public void addChatListener(ChatListener listener) {
         this.listeners.add(listener);
     }
 
 
     public void updateGUI() {
-        for(ChatListener list:listeners){
+        for (ChatListener list : listeners) {
             list.roomsChanged();
         }
     }
 
     public void addMessage(StringMessage msg) {
         getMessages().add(msg);
-        for(ChatListener list:listeners){
+        for (ChatListener list : listeners) {
             list.messageArrived(msg);
         }
     }

@@ -90,4 +90,15 @@ public class MessageFactory {
         }
         return msg;
     }
+
+    public static AckMessage createAckMessage(StringMessage message) {
+        AckMessage msg = new AckMessage();
+        msg.setClient(getLocalClient());
+        msg.setMessage(message);
+        return msg;
+    }
+
+    public static byte[] getBuffer() {
+        return new byte[Settings.Settings().getPacketLength()];
+    }
 }

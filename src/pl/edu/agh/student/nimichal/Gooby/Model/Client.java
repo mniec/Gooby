@@ -12,6 +12,7 @@ public class Client extends BaseDataObject {
     private String name;
     private String ipAddress;
     private int port;
+    private int tcpPort;
 
     private Collection<Room> rooms = new ArrayList<Room>();
     private Room currentRoom;
@@ -54,6 +55,14 @@ public class Client extends BaseDataObject {
 
     public void setUDPPort(int port) {
         this.port = port;
+    }
+
+    public int getTCPPort() {
+        return tcpPort;
+    }
+
+    public void setTCPPort(int tcpPort) {
+        this.tcpPort = tcpPort;
     }
 
     public static Client find(Client client) {

@@ -58,7 +58,32 @@ public class StringMessage extends Message{
         this.time = time;
     }
 
-     @Override
+    public static StringMessage find(StringMessage smsg){
+        for(StringMessage msg:Model.getModel().getMessages()){
+            if(msg.equals(smsg))
+                return msg;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StringMessage that = (StringMessage) o;
+
+        if (id != that.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
     public String toString(){
         return "Message from "+getClient().toString()+": "+ getText();
     }
