@@ -5,6 +5,7 @@ import org.apache.log4j.PropertyConfigurator;
 import pl.edu.agh.student.nimichal.Gooby.Model.Client;
 import pl.edu.agh.student.nimichal.Gooby.Model.Model;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
+import pl.edu.agh.student.nimichal.Gooby.Model.StringMessage;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -39,7 +40,7 @@ public class Gooby {
     public static void main(String[] args) {
         try {
 
-            if(args.length > 0)
+            if (args.length > 0)
                 Settings.setConfigFile(args[0]);
             PropertyConfigurator.configure(Settings.Settings().getLogConfig());
 
@@ -86,7 +87,6 @@ public class Gooby {
             public void keyReleased(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == 10) {
                     String message = messageField.getText();
-                    ((DefaultListModel) messageList.getModel()).addElement(message);
                     mloop.sendMessage(message);
                 }
             }
@@ -114,9 +114,9 @@ public class Gooby {
         //selecting room
         this.roomsTree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode)roomsTree.getLastSelectedPathComponent();
-                if(node != null && !node.isLeaf() && node.getUserObject() instanceof Room){
-                    mloop.joinRoom((Room)node.getUserObject());
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) roomsTree.getLastSelectedPathComponent();
+                if (node != null && !node.isLeaf() && node.getUserObject() instanceof Room) {
+                    mloop.joinRoom((Room) node.getUserObject());
                 }
             }
         });
@@ -134,13 +134,19 @@ public class Gooby {
             public void roomCreated() {
                 updateData();
             }
+
+            public void messageArrived(StringMessage msg) {
+                messagesListModel.addElement(msg.getClient().toString() + "=> " + msg.getText());
+            }
+
         });
 
 
     }
 
     public void updateData() {
-        rootNode =  new DefaultMutableTreeNode("Rooms");
+
+        rootNode = new DefaultMutableTreeNode("Rooms");
 
         for (Room room : Model.getModel().getRooms()) {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(room);

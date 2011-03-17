@@ -11,6 +11,10 @@ import pl.edu.agh.student.nimichal.Gooby.Model.StringMessage;
 
 import java.io.StringReader;
 import java.net.DatagramPacket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import static pl.edu.agh.student.nimichal.Gooby.Model.Model.getModel;
 
@@ -73,8 +77,17 @@ public class MessageFactory {
         return new DatagramPacket(new byte[Settings.Settings().getPacketLength()],Settings.Settings().getPacketLength());
     }
 
+    public static StringMessage createSendMessage(String message) {
+        StringMessage msg = new StringMessage();
+        msg.setClient(getLocalClient());
+        msg.setId(new Random().nextInt());
+        msg.setTime(System.currentTimeMillis());
+        msg.setRoom(Model.getModel().getCurrentRoom());
+        msg.setText(message);
 
-    public static void createSendMessage(String message) {
-        StringMessage msg = new StringMessage()
+        for(Client client:msg.getRoom().getClients()){
+            msg.getRecipientsLeft().add(client);
+        }
+        return msg;
     }
 }

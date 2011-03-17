@@ -1,7 +1,9 @@
 package pl.edu.agh.student.nimichal.Gooby.Model;
 
 import pl.edu.agh.student.nimichal.Gooby.Model.Messages.AckMessage;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Message;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -9,12 +11,12 @@ import java.util.Collection;
  * Date: 17.03.11
  * Time: 07:33
  */
-public class StringMessage extends BaseDataObject{
+public class StringMessage extends Message{
     private int id;
     private Room room;
     private String text;
     private long time;
-    private Collection<Client> recipientsLeft;
+    private Collection<Client> recipientsLeft = new ArrayList<Client>();
 
     public int getId() {
         return id;
@@ -54,5 +56,10 @@ public class StringMessage extends BaseDataObject{
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+     @Override
+    public String toString(){
+        return "Message from "+getClient().toString()+": "+ getText();
     }
 }

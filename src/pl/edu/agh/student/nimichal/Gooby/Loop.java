@@ -5,6 +5,7 @@ import pl.edu.agh.student.nimichal.Gooby.Model.Client;
 import pl.edu.agh.student.nimichal.Gooby.Model.Messages.*;
 import pl.edu.agh.student.nimichal.Gooby.Model.Model;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
+import pl.edu.agh.student.nimichal.Gooby.Model.StringMessage;
 
 import java.io.IOException;
 import java.net.*;
@@ -98,11 +99,10 @@ public class Loop {
             Message response = MessageFactory.formByte(packet.getData(), packet.getLength());
 
 
-
             if (response.getClient().equals(Model.getModel().getThisClient()))
                 continue;
 
-            logger.debug("Receive message: "+ response.toString());
+            logger.debug("Receive message: " + response.toString());
 
             if (response instanceof GreetingResponse)
                 handle((GreetingResponse) response);
@@ -112,8 +112,8 @@ public class Loop {
                 handle((Greeting) response);
             else if (response instanceof JoinRoom)
                 handle((JoinRoom) response);
-            else if (response instanceof SendMessage)
-                handle((SendMessage) response);
+            else if (response instanceof StringMessage)
+                handle((StringMessage) response);
             else if (response instanceof LeaveRoom)
                 handle((LeaveRoom) response);
 
@@ -128,7 +128,6 @@ public class Loop {
             packet.setPort(Settings().getMulticastPort());
 
             logger.debug("Sending Multicast message:" + message.toString());
-            logger.debug("packetdup:" + packet.toString());
 
             multiSock.send(packet);
         } catch (IOException e) {
@@ -144,7 +143,6 @@ public class Loop {
             packet.setPort(port);
 
             logger.debug("Sending UDP message:" + message.toString());
-            logger.debug("packetdup:" + packet.toString());
 
             multiSock.send(packet);
         } catch (IOException e) {
@@ -174,8 +172,9 @@ public class Loop {
         Client.find(message.getClient()).setCurrentRoom(null);
     }
 
-    private void handle(SendMessage message) {
-
+    private void handle(StringMessage message) {
+        Model.getModel().addMessage(message);
+        Model.getModel().updateGUI();
     }
 
     private void handle(JoinRoom message) {
@@ -186,8 +185,12 @@ public class Loop {
 
     //Functions
     public void sendMessage(String message) {
-        MessageFactory.createSendMessage(message);
-        for(Client:client )
+        StringMessage msg = MessageFactory.createSendMessage(message);
+        Model.getModel().addMessage(msg);
+        for(Client client:msg.getRecipientsLeft()){
+            sendUDP(msg,client.getIpAddress(),client.getUDPPort());
+        }
+        Model.getModel().updateGUI();
     }
 
     public void createRoom(Room room) {

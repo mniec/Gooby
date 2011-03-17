@@ -107,4 +107,11 @@ public class Model {
             list.roomsChanged();
         }
     }
+
+    public void addMessage(StringMessage msg) {
+        getMessages().add(msg);
+        for(ChatListener list:listeners){
+            list.messageArrived(msg);
+        }
+    }
 }
