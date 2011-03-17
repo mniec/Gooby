@@ -1,12 +1,20 @@
 package pl.edu.agh.student.nimichal.Gooby.Model.Messages;
 
+import pl.edu.agh.student.nimichal.Gooby.Model.Room;
+
 /**
- * Created by IntelliJ IDEA.
- * User: m
+ * Author: Michal Niec
  * Date: 16.03.11
  * Time: 21:40
- * To change this template use File | Settings | File Templates.
  */
 public class Greeting extends Message<Greeting> {
+    private Room[] rooms;
 
+    public Room[] getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Room[] rooms) {
+        this.rooms = rooms;
+    }
 }

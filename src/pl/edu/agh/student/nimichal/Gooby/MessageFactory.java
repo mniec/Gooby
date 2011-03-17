@@ -7,10 +7,13 @@ import pl.edu.agh.student.nimichal.Gooby.Model.Client;
 import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Greeting;
 import pl.edu.agh.student.nimichal.Gooby.Model.Messages.GreetingResponse;
 import pl.edu.agh.student.nimichal.Gooby.Model.Messages.RoomCreation;
+import pl.edu.agh.student.nimichal.Gooby.Model.Model;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 
 import java.io.StringReader;
 import java.net.DatagramPacket;
+
+import static pl.edu.agh.student.nimichal.Gooby.Model.Model.getModel;
 
 /**
  * Author: Michal Niec
@@ -29,11 +32,7 @@ public class MessageFactory {
     }
 
     public static Client getLocalClient() {
-        Client client = new Client();
-        client.setIpAddress(Settings.Settings().getLocalIP());
-        client.setName(Settings.Settings().getName());
-
-        return client;
+        return getModel().getThisClient();
     }
 
      public static RoomCreation createRoomCreationMessage(Room room) {

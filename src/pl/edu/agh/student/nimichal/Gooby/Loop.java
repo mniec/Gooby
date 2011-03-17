@@ -1,10 +1,8 @@
 package pl.edu.agh.student.nimichal.Gooby;
 
 import org.apache.log4j.Logger;
-import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Greeting;
-import pl.edu.agh.student.nimichal.Gooby.Model.Messages.GreetingResponse;
-import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Message;
-import pl.edu.agh.student.nimichal.Gooby.Model.Messages.RoomCreation;
+import pl.edu.agh.student.nimichal.Gooby.Model.Client;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.*;
 import pl.edu.agh.student.nimichal.Gooby.Model.Model;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 
@@ -112,12 +110,20 @@ public class Loop {
                 handle((RoomCreation) response);
             else if (response instanceof Greeting)
                 handle((Greeting) response);
+            else if(response instanceof JoinRoom)
+                handle((JoinRoom) response);
+            else if(response instanceof SendMessage)
+                handle((SendMessage) response);
+            else if(response instanceof LeaveRoom)
+                handle((LeaveRoom) response);
+
         }
     }
 
+
+
     public void sendMulticast(Message message) {
         try {
-
             DatagramPacket packet = message.dumpToDatagram();
             packet.setAddress(multiAddr);
             packet.setPort(Settings().getMulticastPort());
@@ -148,19 +154,34 @@ public class Loop {
         }
     }
 
-    public void handle(GreetingResponse response) {
-        Model.Model().addClient(response.getClient());
+    //EventHandlers
+
+    public void handle(GreetingResponse message) {
+        Model.getModel().addClient(message.getClient());
     }
 
-    private void handle(RoomCreation response) {
-        Model.Model().addRoom(response.getRoom());
+    private void handle(RoomCreation message) {
+        Model.getModel().addRoom(message.getRoom());
     }
 
-    private void handle(Greeting response) {
-        Model.Model().addClient(response.getClient());
-        sendUDP(MessageFactory.creteGreetingResponse(),response.getClient().getIpAddress(),Settings().getUdpPort());
+    private void handle(Greeting message) {
+        Model.getModel().addClient(message.getClient());
+        sendUDP(MessageFactory.creteGreetingResponse(),message.getClient().getIpAddress(),Settings().getUdpPort());
     }
 
+    private void handle(LeaveRoom message) {
+        Client.find(message.getClient()).setCurrentRoom(null);
+    }
+
+    private void handle(SendMessage message) {
+        //To change body of created methods use File | Settings | File Templates.
+    }
+
+    private void handle(JoinRoom message) {
+        Client.find(message.getClient()).setCurrentRoom(Room.find(message.getRoom()));
+    }
+
+    //Functions
     public void sendMessage(String message) {
     }
 

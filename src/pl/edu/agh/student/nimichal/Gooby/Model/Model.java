@@ -3,6 +3,7 @@ package pl.edu.agh.student.nimichal.Gooby.Model;
 import pl.edu.agh.student.nimichal.Gooby.ChatListener;
 import pl.edu.agh.student.nimichal.Gooby.Model.Client;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
+import pl.edu.agh.student.nimichal.Gooby.Settings;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Model {
     private Model() {
     }
 
-    public static synchronized Model Model() {
+    public static synchronized Model getModel() {
         if (instance == null) {
             instance = new Model();
         }
@@ -50,6 +51,13 @@ public class Model {
     }
 
     public void addClient(Client client) {
+
+        for(Room room:client.getRooms()){
+            if(!rooms.contains(room)){
+                addRoom(room);
+            }
+        }
+        client.setRooms(null);
         getClients().add(client);
         for(ChatListener list:listeners){
             list.clientsChanged();
@@ -72,17 +80,22 @@ public class Model {
     }
 
     public Client getThisClient() {
+        if(thisClient==null){
+            thisClient = new Client();
+            thisClient.setIpAddress(Settings.Settings().getLocalIP());
+            thisClient.setName(Settings.Settings().getName());
+            thisClient.setCurrentRoom(currentRoom);
+            thisClient.setRooms(rooms);
+        }
         return thisClient;
     }
 
-    public void setThisClient(Client thisClient) {
-        this.thisClient = thisClient;
-    }
 
     //listeners
     public void addChatListener(ChatListener listener){
         this.listeners.add(listener);
     }
+
 
 
 

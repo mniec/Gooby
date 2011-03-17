@@ -1,6 +1,5 @@
 package pl.edu.agh.student.nimichal.Gooby;
 
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import pl.edu.agh.student.nimichal.Gooby.Model.Client;
@@ -51,7 +50,7 @@ public class Gooby {
             frame.pack();
             frame.setVisible(true);
 
-            Model.Model().setThisClient(MessageFactory.getLocalClient());
+            Model.getModel().setThisClient(MessageFactory.getLocalClient());
 
             mloop.start();
             mloop.mainLoop();
@@ -105,8 +104,8 @@ public class Gooby {
                     String roomName = roomField.getText();
                     Room room = new Room();
                     room.setName(roomName);
-                    room.setClients(new Client[]{Model.Model().getThisClient()});
-                    Model.Model().addRoom(room);
+                    room.setClients(new Client[]{Model.getModel().getThisClient()});
+                    Model.getModel().addRoom(room);
                     mloop.createRoom(room);
                 }
             }
@@ -117,13 +116,13 @@ public class Gooby {
             public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode)roomsTree.getLastSelectedPathComponent();
                 if(!node.isLeaf()){
-                    Model.Model().setCurrentRoom((Room)node.getUserObject());
+                    Model.getModel().setCurrentRoom((Room)node.getUserObject());
                 }
             }
         });
 
         //chat events
-        Model.Model().addChatListener(new ChatListener() {
+        Model.getModel().addChatListener(new ChatListener() {
             public void clientsChanged() {
                 updateData();
             }
@@ -143,7 +142,7 @@ public class Gooby {
     public void updateData() {
         rootNode =  new DefaultMutableTreeNode("Rooms");
 
-        for (Room room : Model.Model().getRooms()) {
+        for (Room room : Model.getModel().getRooms()) {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(room);
             for (Client client : room.getClients()) {
                 node.add(new DefaultMutableTreeNode(client));
