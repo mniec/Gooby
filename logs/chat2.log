@@ -1,0 +1,140 @@
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@3b6752c9
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting from Franek2:127.0.0.1
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@4ddf3d59
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@182153fe
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek2:127.0.0.1 created room ala
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek2:127.0.0.1 is joining room ala
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@69107c05
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room dupa
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@2dc8b884
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room dupa
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@7f0eeb26
+[main] FATAL root - Error durring !
+com.esotericsoftware.yamlbeans.YamlReader$YamlReaderException: Line 3, column 11: Unable to find property 'UDPPort' on class: pl.edu.agh.student.nimichal.Gooby.Model.Client
+	at com.esotericsoftware.yamlbeans.YamlReader.readValueInternal(YamlReader.java:296)
+	at com.esotericsoftware.yamlbeans.YamlReader.readValue(YamlReader.java:156)
+	at com.esotericsoftware.yamlbeans.YamlReader.readValueInternal(YamlReader.java:299)
+	at com.esotericsoftware.yamlbeans.YamlReader.readValue(YamlReader.java:156)
+	at com.esotericsoftware.yamlbeans.YamlReader.read(YamlReader.java:106)
+	at com.esotericsoftware.yamlbeans.YamlReader.read(YamlReader.java:91)
+	at com.esotericsoftware.yamlbeans.YamlReader.read(YamlReader.java:83)
+	at pl.edu.agh.student.nimichal.Gooby.MessageFactory.formByte(MessageFactory.java:63)
+	at pl.edu.agh.student.nimichal.Gooby.Loop.mainLoop(Loop.java:98)
+	at pl.edu.agh.student.nimichal.Gooby.Gooby.main(Gooby.java:57)
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@7041a12f
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room ala
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room dupa
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@6d56d7c8
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room dupa
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@5903d246
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room dupa2
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@24fe2558
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room dupa2
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@7307f742
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room dupa4
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@20c62080
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room dupa4
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@313d21d6
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room 44
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@64bd4e3c
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room asd
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room asd
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@7e79b177
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room duparez
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@3844006e
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room duparez
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@3414a97b
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room duparez
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@14800aa1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room ala
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@46dab859
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@485b78cf
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room ala
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@74e8f8c5
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room ala
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@485b78cf
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room Fu
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room Fu
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room Fu
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@74e8f8c5
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room Fu
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@5288d319
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room futis
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@45b3278a
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room futis
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@54c9f997
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room futis
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@4969dd64
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending UDP message:Greeting response from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - packetdup:java.net.DatagramPacket@49586cbd
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room gg
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room gg
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room gg
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending UDP message:Greeting response from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room roor
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room roor
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room roor
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Message from Franek:127.0.0.1: Ala
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending UDP message:Message from Franek2:127.0.0.1: siemako
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room inn
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room inn
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room inn
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Message from Franek:127.0.0.1: okejor
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending UDP message:Message from Franek2:127.0.0.1: bomba
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Message from Franek:127.0.0.1: okejorxdfgd
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Message from Franek:127.0.0.1: okejorxdfgdsadfasdfasdf
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 created room siema
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room siema
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room siema
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Message from Franek:127.0.0.1: siema
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending UDP message:pl.edu.agh.student.nimichal.Gooby.Model.Messages.AckMessage@3844006e
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Gooby - ================================== Starting application ================================== 
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Greeting from Franek2:127.0.0.1
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Greeting response from Franek:127.0.0.1
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 created room kasio
+[AWT-EventQueue-0] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending Multicast message:Franek2:127.0.0.1 is joining room kasio
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Franek:127.0.0.1 is joining room kasio
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Receive message: Message from Franek:127.0.0.1: siema
+[main] DEBUG pl.edu.agh.student.nimichal.Gooby.Loop - Sending UDP message:Ack from Franek:127.0.0.1 for message: siema
