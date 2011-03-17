@@ -14,3 +14,5 @@ logConfig: logger.conf
 packetLength: 5000
 
 timeToReceiveResponse: 1000
+
+timeout: 2000

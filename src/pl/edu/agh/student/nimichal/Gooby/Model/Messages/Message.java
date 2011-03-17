@@ -1,8 +1,8 @@
 package pl.edu.agh.student.nimichal.Gooby.Model.Messages;
 
 import org.apache.log4j.Logger;
-import pl.edu.agh.student.nimichal.Model.Model.BaseDataObject;
-import pl.edu.agh.student.nimichal.Model.Model.Client;
+import pl.edu.agh.student.nimichal.Gooby.Model.BaseDataObject;
+import pl.edu.agh.student.nimichal.Gooby.Model.Client;
 
 import java.net.DatagramPacket;
 

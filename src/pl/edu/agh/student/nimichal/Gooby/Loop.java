@@ -1,14 +1,16 @@
 package pl.edu.agh.student.nimichal.Gooby;
 
 import org.apache.log4j.Logger;
-import pl.edu.agh.student.nimichal.Model.Model.Messages.Greeting;
-import pl.edu.agh.student.nimichal.Model.Model.Messages.GreetingResponse;
-import pl.edu.agh.student.nimichal.Model.Model;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Greeting;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.GreetingResponse;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Message;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.RoomCreation;
+import pl.edu.agh.student.nimichal.Gooby.Model.Model;
+import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
 
 import static pl.edu.agh.student.nimichal.Gooby.Settings.Settings;
 
@@ -23,24 +25,22 @@ public class Loop {
 
     private MulticastSocket multiSock;
     private InetAddress multiAddr;
+
     private DatagramSocket udpSock;
-    private DatagramChannel udpChannel;
     private Socket tcpSock;
 
     private ByteBuffer buffer;
 
     public Loop() {
         try {
+
             multiAddr = InetAddress.getByName(Settings().getMulticastIP());
-            multiSock = new MulticastSocket(Settings().getMulticastPort());
+            multiSock = new MulticastSocket(new InetSocketAddress(Settings().getMulticastPort()));
+            multiSock.joinGroup(multiAddr);
+            multiSock.setSoTimeout(Settings().getTimeout());
 
             udpSock = new DatagramSocket(Settings().getUdpPort());
-
-            udpChannel = DatagramChannel.open();
-            udpChannel.configureBlocking(false);
-
-            buffer = ByteBuffer.allocate(Settings().getPacketLength());
-            buffer.flip();
+            udpSock.setSoTimeout(Settings().getTimeout());
 
         } catch (IOException e) {
             logger.fatal("Cannot create multicast socket", e);
@@ -55,34 +55,86 @@ public class Loop {
 
             Greeting message = MessageFactory.crateGreetingMsg();
 
-            DatagramPacket packet = message.dumpToDatagram();
-            packet.setAddress(multiAddr);
-            multiSock.send(packet);
-
-            logger.info("Greeting sent :" + message.toYAML());
-
-            long start = System.currentTimeMillis();
-
-            while (System.currentTimeMillis() - start > Settings().getTimeToReceiveResponse()) {
-                SocketAddress sa = udpChannel.receive(buffer);
-                if (sa == null) {
-                    Thread.sleep(10);
-                } else {
-                    GreetingResponse response = MessageFactory.formByte(buffer.array(),buffer.limit());
-                    handle(response);
-                }
-            }
+            sendMulticast(message);
 
         } catch (IOException e) {
             logger.fatal("Cannot create multicast socket", e);
             System.exit(1);
-        } catch (InterruptedException e) {
-            logger.fatal("Error durring sleep !", e);
+        }
+    }
+
+    private DatagramPacket receive() {
+        DatagramPacket packet = MessageFactory.getPacket();
+
+        while (true) {
+            try {
+                try {
+                    udpSock.receive(packet);
+                    return packet;
+                } catch (SocketTimeoutException e) {
+
+                }
+                try {
+                    multiSock.receive(packet);
+                    return packet;
+                } catch (SocketTimeoutException e) {
+                }
+
+                Thread.sleep(10);
+            } catch (IOException e) {
+                logger.fatal("Error during receiving!", e);
+                System.exit(1);
+            } catch (InterruptedException e) {
+                logger.fatal("Interrupted during sleep!", e);
+                System.exit(1);
+            }
+
+        }
+
+    }
+
+    public void mainLoop() {
+        while (true) {
+            DatagramPacket packet = receive();
+            Message response = MessageFactory.formByte(receive().getData(), receive().getLength());
+
+            if (response instanceof GreetingResponse)
+                handle((GreetingResponse) response);
+            else if (response instanceof RoomCreation)
+                handle((RoomCreation) response);
+            else if (response instanceof Greeting)
+                handle((Greeting) response);
+        }
+    }
+
+    public void sendMulticast(Message message) {
+        try {
+            logger.debug("Sending Multicast message:" + message.toString());
+            logger.debug("packetdup:" + message.dumpToDatagram().toString());
+            multiSock.send(message.dumpToDatagram());
+        } catch (IOException e) {
+            logger.fatal("Error durring sending multicas !", e);
             System.exit(1);
         }
     }
 
     public void handle(GreetingResponse response) {
         Model.Model().addClient(response.getClient());
+    }
+
+    private void handle(RoomCreation response) {
+        //To change body of created methods use File | Settings | File Templates.
+    }
+
+    private void handle(Greeting response) {
+        Model.Model().addClient(response.getClient());
+    }
+
+    public void sendMessage(String message) {
+    }
+
+    public void createRoom(Room room) {
+        RoomCreation message = MessageFactory.createRoomCreationMessage(room);
+        sendMulticast(message);
     }
 }

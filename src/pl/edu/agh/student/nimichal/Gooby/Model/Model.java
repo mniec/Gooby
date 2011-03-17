@@ -4,6 +4,8 @@ import pl.edu.agh.student.nimichal.Gooby.ChatListener;
 import pl.edu.agh.student.nimichal.Gooby.Model.Client;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -14,9 +16,11 @@ import java.util.Collection;
 public class Model {
     private static Model instance;
 
-    private Collection<Client> clients;
-    private Room[] rooms;
-    private Collection<ChatListener> listeners;
+    private Collection<Client> clients = new ArrayList<Client>();
+    private Collection<Room> rooms = new ArrayList<Room>();
+    private Collection<ChatListener> listeners = new ArrayList<ChatListener>();
+    private Room currentRoom;
+    private Client thisClient;
 
     private Model() {
     }
@@ -29,11 +33,11 @@ public class Model {
 
     }
 
-    public Room[] getRooms() {
+    public Collection<Room> getRooms() {
         return rooms;
     }
 
-    public void setRooms(Room[] rooms) {
+    public void setRooms(Collection<Room> rooms) {
         this.rooms = rooms;
     }
 
@@ -47,11 +51,39 @@ public class Model {
 
     public void addClient(Client client) {
         getClients().add(client);
+        for(ChatListener list:listeners){
+            list.clientsChanged();
+        }
+    }
 
+    public void addRoom(Room room) {
+        this.rooms.add(room);
+        for(ChatListener list:listeners){
+            list.roomsChanged();
+        }
+    }
+
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
+    }
+
+    public Client getThisClient() {
+        return thisClient;
+    }
+
+    public void setThisClient(Client thisClient) {
+        this.thisClient = thisClient;
     }
 
     //listeners
     public void addChatListener(ChatListener listener){
         this.listeners.add(listener);
     }
+
+
+
 }

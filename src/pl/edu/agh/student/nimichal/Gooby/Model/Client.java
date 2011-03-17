@@ -5,16 +5,16 @@ package pl.edu.agh.student.nimichal.Gooby.Model;
  * Date: 16.03.11
  * Time: 23:52
  */
-public class Client extends pl.edu.agh.student.nimichal.Model.BaseDataObject {
+public class Client extends BaseDataObject {
     private String name;
     private String ipAddress;
-    private pl.edu.agh.student.nimichal.Model.Room[] rooms;
+    private Room[] rooms;
 
-    public pl.edu.agh.student.nimichal.Model.Room[] getRooms() {
+    public Room[] getRooms() {
         return rooms;
     }
 
-    public void setRooms(pl.edu.agh.student.nimichal.Model.Room[] rooms) {
+    public void setRooms(Room[] rooms) {
         this.rooms = rooms;
     }
 

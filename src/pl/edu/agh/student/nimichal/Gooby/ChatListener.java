@@ -7,7 +7,8 @@ package pl.edu.agh.student.nimichal.Gooby;
  */
 public interface ChatListener {
 
-    public void ClientsChanged();
-    public void RoomsChanged();
+    public void clientsChanged();
+    public void roomsChanged();
+    public void roomCreated();
 
 }

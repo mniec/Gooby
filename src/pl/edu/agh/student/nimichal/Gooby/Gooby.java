@@ -1,5 +1,6 @@
 package pl.edu.agh.student.nimichal.Gooby;
 
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import pl.edu.agh.student.nimichal.Gooby.Model.Client;
@@ -7,9 +8,11 @@ import pl.edu.agh.student.nimichal.Gooby.Model.Model;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,7 +22,7 @@ import java.awt.event.KeyListener;
  * Date: 16.03.11
  * Time: 15:44
  */
-public class Gooby implements KeyListener, ChatListener {
+public class Gooby {
 
     static Logger logger = Logger.getLogger(Gooby.class);
 
@@ -28,8 +31,9 @@ public class Gooby implements KeyListener, ChatListener {
     private JTextField messageField;
     private JTextField roomField;
     private JTree roomsTree;
-    private TreeNode rootNode = new DefaultMutableTreeNode("Rooms");
+    private DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Rooms");
     private DefaultTreeModel roomsTreeModel = new DefaultTreeModel(rootNode);
+    private static Loop mloop = new Loop();
 
     private DefaultListModel messagesListModel = new DefaultListModel();
 
@@ -45,8 +49,10 @@ public class Gooby implements KeyListener, ChatListener {
             frame.pack();
             frame.setVisible(true);
 
+            Model.Model().setThisClient(MessageFactory.getLocalClient());
 
-            new Loop().start();
+            mloop.start();
+            mloop.mainLoop();
         } catch (HeadlessException e) {
             logger.fatal("Error in main method!", e);
             System.exit(1);
@@ -58,11 +64,6 @@ public class Gooby implements KeyListener, ChatListener {
     }
 
     private void createUIComponents() {
-        //listeners
-        this.messageField.addKeyListener(this);
-        this.roomField.addKeyListener(this);
-        Model.Model().addChatListener(this);
-
         //mesages List!
         this.messageList.setModel(messagesListModel);
         this.messageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -70,39 +71,87 @@ public class Gooby implements KeyListener, ChatListener {
 
         //roomsList!
         this.roomsTree.setModel(roomsTreeModel);
-    }
+        this.roomsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+        //adding new Message in room
+        this.messageField.addKeyListener(new KeyListener() {
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            public void keyReleased(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == 10) {
+                    String message = messageField.getText();
+                    ((DefaultListModel) messageList.getModel()).addElement(message);
+                    mloop.sendMessage(message);
+                }
+            }
+        });
+
+        //adding new Room
+        this.roomField.addKeyListener(new KeyListener() {
+            public void keyTyped(KeyEvent keyEvent) {
+            }
+
+            public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            public void keyReleased(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == 10) {
+                    String roomName = roomField.getText();
+                    Room room = new Room();
+                    room.setName(roomName);
+                    room.setClients(new Client[]{Model.Model().getThisClient()});
+                    Model.Model().addRoom(room);
+                    mloop.createRoom(roomName);
+                }
+            }
+        });
+
+        //selecting room
+        this.roomsTree.addTreeSelectionListener(new TreeSelectionListener() {
+            public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)roomsTree.getLastSelectedPathComponent();
+                if(!node.isLeaf()){
+                    Model.Model().setCurrentRoom((Room)node.getUserObject());
+                }
+            }
+        });
+
+        //chat events
+        Model.Model().addChatListener(new ChatListener() {
+            public void clientsChanged() {
+                updateData();
+            }
+
+            public void roomsChanged() {
+                updateData();
+            }
+
+            public void roomCreated() {
+                updateData();
+            }
+        });
 
 
-    public void keyTyped(KeyEvent keyEvent) {
-
-    }
-
-    public void keyPressed(KeyEvent keyEvent) {
-
-    }
-
-    public void keyReleased(KeyEvent keyEvent) {
-        if (keyEvent.getKeyCode() == 10) {
-            String message = messageField.getText();
-            JLabel label = new JLabel(message);
-            ((DefaultListModel) messageList.getModel()).addElement(message);
-        }
     }
 
     public void updateData() {
+        rootNode =  new DefaultMutableTreeNode("Rooms");
+
         for (Room room : Model.Model().getRooms()) {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(room);
             for (Client client : room.getClients()) {
                 node.add(new DefaultMutableTreeNode(client));
             }
+            rootNode.add(node);
         }
+
+        roomsTreeModel = new DefaultTreeModel(rootNode);
+        roomsTree.setModel(roomsTreeModel);
     }
 
-    public void ClientsChanged() {
-        updateData();
-    }
 
-    public void RoomsChanged() {
-        updateData();
-    }
 }

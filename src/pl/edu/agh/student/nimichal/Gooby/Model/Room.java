@@ -7,13 +7,13 @@ package pl.edu.agh.student.nimichal.Gooby.Model;
  */
 public class Room {
     private String name;
-    transient private pl.edu.agh.student.nimichal.Model.Client[] clients;
+    transient private Client[] clients;
 
-    public pl.edu.agh.student.nimichal.Model.Client[] getClients() {
+    public Client[] getClients() {
         return clients;
     }
 
-    public void setClients(pl.edu.agh.student.nimichal.Model.Client[] clients) {
+    public void setClients(Client[] clients) {
         this.clients = clients;
     }
 

@@ -29,6 +29,7 @@ public class Settings {
     private int packetLength;
     private int multicastTTL;
     private int timeToReceiveResponse;
+    private int timeout;
 
     private static Settings instance;
     private static String filename = "config.yml";
@@ -133,5 +134,13 @@ public class Settings {
 
     public void setTimeToReceiveResponse(int timeToReceiveResponse) {
         this.timeToReceiveResponse = timeToReceiveResponse;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 }
