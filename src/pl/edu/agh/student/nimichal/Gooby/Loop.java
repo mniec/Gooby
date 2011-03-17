@@ -32,15 +32,21 @@ public class Loop {
     private ByteBuffer buffer;
 
     public Loop() {
+
+    }
+
+    public void initSockets() {
         try {
 
             multiAddr = InetAddress.getByName(Settings().getMulticastIP());
             multiSock = new MulticastSocket(new InetSocketAddress(Settings().getMulticastPort()));
-            multiSock.joinGroup(multiAddr);
+            multiSock.setReuseAddress(true);
+            multiSock.setTimeToLive(Settings().getMulticastTTL());
             multiSock.setSoTimeout(Settings().getTimeout());
 
             udpSock = new DatagramSocket(Settings().getUdpPort());
             udpSock.setSoTimeout(Settings().getTimeout());
+            udpSock.setReuseAddress(true);
 
         } catch (IOException e) {
             logger.fatal("Cannot create multicast socket", e);
@@ -50,6 +56,8 @@ public class Loop {
 
     public void start() {
         try {
+            initSockets();
+
             multiSock.setTimeToLive(Settings().getMulticastTTL());
             multiSock.joinGroup(multiAddr);
 
@@ -96,7 +104,7 @@ public class Loop {
     public void mainLoop() {
         while (true) {
             DatagramPacket packet = receive();
-            Message response = MessageFactory.formByte(receive().getData(), receive().getLength());
+            Message response = MessageFactory.formByte(packet.getData(), packet.getLength());
 
             if (response instanceof GreetingResponse)
                 handle((GreetingResponse) response);
@@ -109,11 +117,33 @@ public class Loop {
 
     public void sendMulticast(Message message) {
         try {
+
+            DatagramPacket packet = message.dumpToDatagram();
+            packet.setAddress(multiAddr);
+            packet.setPort(Settings().getMulticastPort());
+
             logger.debug("Sending Multicast message:" + message.toString());
-            logger.debug("packetdup:" + message.dumpToDatagram().toString());
-            multiSock.send(message.dumpToDatagram());
+            logger.debug("packetdup:" + packet.toString());
+
+            multiSock.send(packet);
         } catch (IOException e) {
             logger.fatal("Error durring sending multicas !", e);
+            System.exit(1);
+        }
+    }
+
+    public void sendUDP(Message message, String addr, int port) {
+        try {
+            DatagramPacket packet = message.dumpToDatagram();
+            packet.setAddress(InetAddress.getByName(addr));
+            packet.setPort(port);
+
+            logger.debug("Sending UDP message:" + message.toString());
+            logger.debug("packetdup:" + packet.toString());
+
+            multiSock.send(packet);
+        } catch (IOException e) {
+            logger.fatal("Error durring sending multicast!", e);
             System.exit(1);
         }
     }
@@ -123,11 +153,12 @@ public class Loop {
     }
 
     private void handle(RoomCreation response) {
-        //To change body of created methods use File | Settings | File Templates.
+        Model.Model().addRoom(response.getRoom());
     }
 
     private void handle(Greeting response) {
         Model.Model().addClient(response.getClient());
+        sendUDP(MessageFactory.creteGreetingResponse(),response.getClient().getIpAddress(),Settings().getUdpPort());
     }
 
     public void sendMessage(String message) {

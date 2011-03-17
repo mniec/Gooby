@@ -5,6 +5,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import org.apache.log4j.Logger;
 import pl.edu.agh.student.nimichal.Gooby.Model.Client;
 import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Greeting;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.GreetingResponse;
 import pl.edu.agh.student.nimichal.Gooby.Model.Messages.RoomCreation;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 
@@ -40,6 +41,14 @@ public class MessageFactory {
         roomCreation.setRoom(room);
 
         return roomCreation;
+    }
+
+    public static GreetingResponse creteGreetingResponse(){
+        GreetingResponse response = new GreetingResponse();
+        response.setClient(getLocalClient());
+
+        return  response;
+
     }
 
     public static <T> T formByte(byte[] data, int len) {

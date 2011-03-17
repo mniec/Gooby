@@ -5,11 +5,11 @@ multicastIP: 224.1.1.54
 
 multicastTTL: 1
 
-udpPort: 7070
-multicastPort: 8080
-tcpPort: 9090
+udpPort: 7071
+multicastPort: 8081
+tcpPort: 9091
 
-logConfig: logger.conf
+logConfig: logger2.conf
 
 packetLength: 5000
 

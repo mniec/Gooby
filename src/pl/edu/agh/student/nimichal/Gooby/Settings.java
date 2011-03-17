@@ -31,10 +31,17 @@ public class Settings {
     private int timeToReceiveResponse;
     private int timeout;
 
+
     private static Settings instance;
-    private static String filename = "config.yml";
+    transient private static String filename = "config.yml";
 
     private Settings() {
+    }
+
+    public static void setConfigFile(String value){
+        if(value != null){
+            filename = value;
+        }
     }
 
     public static synchronized Settings Settings() {

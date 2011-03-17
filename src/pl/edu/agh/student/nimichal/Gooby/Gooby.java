@@ -39,6 +39,8 @@ public class Gooby {
 
     public static void main(String[] args) {
         try {
+            if(args.length > 0)
+                Settings.setConfigFile(args[0]);
             PropertyConfigurator.configure(Settings.Settings().getLogConfig());
 
             logger.debug("Starting application");
@@ -105,7 +107,7 @@ public class Gooby {
                     room.setName(roomName);
                     room.setClients(new Client[]{Model.Model().getThisClient()});
                     Model.Model().addRoom(room);
-                    mloop.createRoom(roomName);
+                    mloop.createRoom(room);
                 }
             }
         });

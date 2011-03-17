@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_gooby" default="compile.module.gooby">
+  <dirname property="module.gooby.basedir" file="${ant.file.module_gooby}"/>
+  
+  <property name="module.jdk.home.gooby" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.gooby" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.gooby" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.gooby" value="${compiler.args}"/>
+  
+  <property name="gooby.output.dir" value="${module.gooby.basedir}/out/production/Gooby"/>
+  <property name="gooby.testoutput.dir" value="${module.gooby.basedir}/out/test/Gooby"/>
+  
+  <path id="gooby.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="gooby.module.production.classpath">
+    <path refid="${module.jdk.classpath.gooby}"/>
+    <path refid="library.my-libs.classpath"/>
+  </path>
+  
+  <path id="gooby.runtime.production.module.classpath">
+    <pathelement location="${gooby.output.dir}"/>
+    <path refid="library.my-libs.classpath"/>
+  </path>
+  
+  <path id="gooby.module.classpath">
+    <path refid="${module.jdk.classpath.gooby}"/>
+    <pathelement location="${gooby.output.dir}"/>
+    <path refid="library.my-libs.classpath"/>
+  </path>
+  
+  <path id="gooby.runtime.module.classpath">
+    <pathelement location="${gooby.testoutput.dir}"/>
+    <pathelement location="${gooby.output.dir}"/>
+    <path refid="library.my-libs.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.gooby">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.gooby">
+    <patternset refid="excluded.from.module.gooby"/>
+  </patternset>
+  
+  <path id="gooby.module.sourcepath">
+    <dirset dir="${module.gooby.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.gooby" depends="compile.module.gooby.production,compile.module.gooby.tests" description="Compile module Gooby"/>
+  
+  <target name="compile.module.gooby.production" depends="register.custom.compilers" description="Compile module Gooby; production classes">
+    <mkdir dir="${gooby.output.dir}"/>
+    <javac2 destdir="${gooby.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.gooby}/javac">
+      <compilerarg line="${compiler.args.gooby}"/>
+      <bootclasspath refid="gooby.module.bootclasspath"/>
+      <classpath refid="gooby.module.production.classpath"/>
+      <src refid="gooby.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.gooby"/>
+    </javac2>
+    
+    <copy todir="${gooby.output.dir}">
+      <fileset dir="${module.gooby.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.gooby.tests" depends="register.custom.compilers,compile.module.gooby.production" description="compile module Gooby; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.gooby" description="cleanup module">
+    <delete dir="${gooby.output.dir}"/>
+    <delete dir="${gooby.testoutput.dir}"/>
+  </target>
+</project>
