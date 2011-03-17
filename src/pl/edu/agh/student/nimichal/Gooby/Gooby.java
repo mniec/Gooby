@@ -38,11 +38,13 @@ public class Gooby {
 
     public static void main(String[] args) {
         try {
+
             if(args.length > 0)
                 Settings.setConfigFile(args[0]);
             PropertyConfigurator.configure(Settings.Settings().getLogConfig());
 
-            logger.debug("Starting application");
+            logger.debug("================================== Starting application ================================== ");
+
 
             JFrame frame = new JFrame("Gooby");
             frame.setContentPane(new Gooby().mainPanel);
@@ -50,7 +52,6 @@ public class Gooby {
             frame.pack();
             frame.setVisible(true);
 
-            Model.getModel().setThisClient(MessageFactory.getLocalClient());
 
             mloop.start();
             mloop.mainLoop();
@@ -74,7 +75,7 @@ public class Gooby {
         this.roomsTree.setModel(roomsTreeModel);
         this.roomsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        //adding new Message in room
+        //adding new StringMessage in room
         this.messageField.addKeyListener(new KeyListener() {
             public void keyTyped(KeyEvent keyEvent) {
             }
@@ -104,9 +105,8 @@ public class Gooby {
                     String roomName = roomField.getText();
                     Room room = new Room();
                     room.setName(roomName);
-                    room.setClients(new Client[]{Model.getModel().getThisClient()});
-                    Model.getModel().addRoom(room);
                     mloop.createRoom(room);
+                    mloop.joinRoom(room);
                 }
             }
         });
@@ -115,8 +115,8 @@ public class Gooby {
         this.roomsTree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode)roomsTree.getLastSelectedPathComponent();
-                if(!node.isLeaf()){
-                    Model.getModel().setCurrentRoom((Room)node.getUserObject());
+                if(node != null && !node.isLeaf() && node.getUserObject() instanceof Room){
+                    mloop.joinRoom((Room)node.getUserObject());
                 }
             }
         });

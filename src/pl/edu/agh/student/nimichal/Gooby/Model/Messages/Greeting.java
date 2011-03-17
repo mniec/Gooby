@@ -8,13 +8,9 @@ import pl.edu.agh.student.nimichal.Gooby.Model.Room;
  * Time: 21:40
  */
 public class Greeting extends Message<Greeting> {
-    private Room[] rooms;
 
-    public Room[] getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Room[] rooms) {
-        this.rooms = rooms;
+    @Override
+    public String toString(){
+        return "Greeting from "+ getClient().toString();
     }
 }

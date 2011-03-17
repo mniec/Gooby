@@ -1,11 +1,8 @@
 package pl.edu.agh.student.nimichal.Gooby.Model;
 
 import pl.edu.agh.student.nimichal.Gooby.ChatListener;
-import pl.edu.agh.student.nimichal.Gooby.Model.Client;
-import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 import pl.edu.agh.student.nimichal.Gooby.Settings;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,6 +17,8 @@ public class Model {
     private Collection<Client> clients = new ArrayList<Client>();
     private Collection<Room> rooms = new ArrayList<Room>();
     private Collection<ChatListener> listeners = new ArrayList<ChatListener>();
+    private Collection<StringMessage> messages = new ArrayList<StringMessage>();
+
     private Room currentRoom;
     private Client thisClient;
 
@@ -59,20 +58,24 @@ public class Model {
         }
         client.setRooms(null);
         getClients().add(client);
-        for(ChatListener list:listeners){
-            list.clientsChanged();
-        }
+        updateGUI();
     }
 
     public void addRoom(Room room) {
+        room.setClients(new ArrayList<Client>());
         this.rooms.add(room);
-        for(ChatListener list:listeners){
-            list.roomsChanged();
-        }
     }
 
     public Room getCurrentRoom() {
         return currentRoom;
+    }
+
+    public Collection<StringMessage> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Collection<StringMessage> messages) {
+        this.messages = messages;
     }
 
     public void setCurrentRoom(Room currentRoom) {
@@ -86,6 +89,8 @@ public class Model {
             thisClient.setName(Settings.Settings().getName());
             thisClient.setCurrentRoom(currentRoom);
             thisClient.setRooms(rooms);
+            thisClient.setUDPPort(Settings.Settings().getUdpPort());
+
         }
         return thisClient;
     }
@@ -97,6 +102,9 @@ public class Model {
     }
 
 
-
-
+    public void updateGUI() {
+        for(ChatListener list:listeners){
+            list.roomsChanged();
+        }
+    }
 }

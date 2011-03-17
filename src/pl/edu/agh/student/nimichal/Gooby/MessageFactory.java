@@ -4,11 +4,10 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import org.apache.log4j.Logger;
 import pl.edu.agh.student.nimichal.Gooby.Model.Client;
-import pl.edu.agh.student.nimichal.Gooby.Model.Messages.Greeting;
-import pl.edu.agh.student.nimichal.Gooby.Model.Messages.GreetingResponse;
-import pl.edu.agh.student.nimichal.Gooby.Model.Messages.RoomCreation;
+import pl.edu.agh.student.nimichal.Gooby.Model.Messages.*;
 import pl.edu.agh.student.nimichal.Gooby.Model.Model;
 import pl.edu.agh.student.nimichal.Gooby.Model.Room;
+import pl.edu.agh.student.nimichal.Gooby.Model.StringMessage;
 
 import java.io.StringReader;
 import java.net.DatagramPacket;
@@ -38,6 +37,7 @@ public class MessageFactory {
      public static RoomCreation createRoomCreationMessage(Room room) {
         RoomCreation roomCreation = new RoomCreation();
         roomCreation.setRoom(room);
+        roomCreation.setClient(getLocalClient());
 
         return roomCreation;
     }
@@ -48,6 +48,13 @@ public class MessageFactory {
 
         return  response;
 
+    }
+
+    public static JoinRoom createJoinRoomMsg(Room room) {
+        JoinRoom msg = new JoinRoom();
+        msg.setRoom(room);
+        msg.setClient(getLocalClient());
+        return msg;
     }
 
     public static <T> T formByte(byte[] data, int len) {
@@ -64,5 +71,10 @@ public class MessageFactory {
 
     public static DatagramPacket getPacket(){
         return new DatagramPacket(new byte[Settings.Settings().getPacketLength()],Settings.Settings().getPacketLength());
+    }
+
+
+    public static void createSendMessage(String message) {
+        StringMessage msg = new StringMessage()
     }
 }

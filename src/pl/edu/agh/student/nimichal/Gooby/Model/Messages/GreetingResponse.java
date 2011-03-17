@@ -8,4 +8,9 @@ package pl.edu.agh.student.nimichal.Gooby.Model.Messages;
 public class GreetingResponse extends Response {
 
 
+    @Override
+    public String toString(){
+        return "Greeting response from "+ getClient().toString();
+    }
+
 }

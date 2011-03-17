@@ -17,4 +17,9 @@ public class JoinRoom extends Message{
     public void setRoom(Room room) {
         this.room = room;
     }
+
+    @Override
+    public String toString(){
+        return getClient().toString() + " is joining room " + getRoom().toString();
+    }
 }

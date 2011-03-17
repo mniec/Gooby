@@ -37,10 +37,11 @@ public class Loop {
         try {
 
             multiAddr = InetAddress.getByName(Settings().getMulticastIP());
-            multiSock = new MulticastSocket(new InetSocketAddress(Settings().getMulticastPort()));
+            multiSock = new MulticastSocket(Settings().getMulticastPort());
             multiSock.setReuseAddress(true);
             multiSock.setTimeToLive(Settings().getMulticastTTL());
             multiSock.setSoTimeout(Settings().getTimeout());
+            multiSock.joinGroup(multiAddr);
 
             udpSock = new DatagramSocket(Settings().getUdpPort());
             udpSock.setSoTimeout(Settings().getTimeout());
@@ -53,24 +54,16 @@ public class Loop {
     }
 
     public void start() {
-        try {
-            initSockets();
+        initSockets();
 
-            multiSock.setTimeToLive(Settings().getMulticastTTL());
-            multiSock.joinGroup(multiAddr);
+        Greeting message = MessageFactory.crateGreetingMsg();
 
-            Greeting message = MessageFactory.crateGreetingMsg();
-
-            sendMulticast(message);
-
-        } catch (IOException e) {
-            logger.fatal("Cannot create multicast socket", e);
-            System.exit(1);
-        }
+        sendMulticast(message);
     }
 
     private DatagramPacket receive() {
         DatagramPacket packet = MessageFactory.getPacket();
+        packet.setPort(Settings().getMulticastPort());
 
         while (true) {
             try {
@@ -104,22 +97,28 @@ public class Loop {
             DatagramPacket packet = receive();
             Message response = MessageFactory.formByte(packet.getData(), packet.getLength());
 
+
+
+            if (response.getClient().equals(Model.getModel().getThisClient()))
+                continue;
+
+            logger.debug("Receive message: "+ response.toString());
+
             if (response instanceof GreetingResponse)
                 handle((GreetingResponse) response);
             else if (response instanceof RoomCreation)
                 handle((RoomCreation) response);
             else if (response instanceof Greeting)
                 handle((Greeting) response);
-            else if(response instanceof JoinRoom)
+            else if (response instanceof JoinRoom)
                 handle((JoinRoom) response);
-            else if(response instanceof SendMessage)
+            else if (response instanceof SendMessage)
                 handle((SendMessage) response);
-            else if(response instanceof LeaveRoom)
+            else if (response instanceof LeaveRoom)
                 handle((LeaveRoom) response);
 
         }
     }
-
 
 
     public void sendMulticast(Message message) {
@@ -158,15 +157,17 @@ public class Loop {
 
     public void handle(GreetingResponse message) {
         Model.getModel().addClient(message.getClient());
+        Model.getModel().updateGUI();
     }
 
     private void handle(RoomCreation message) {
         Model.getModel().addRoom(message.getRoom());
+        Model.getModel().updateGUI();
     }
 
     private void handle(Greeting message) {
         Model.getModel().addClient(message.getClient());
-        sendUDP(MessageFactory.creteGreetingResponse(),message.getClient().getIpAddress(),Settings().getUdpPort());
+        sendUDP(MessageFactory.creteGreetingResponse(), message.getClient().getIpAddress(), message.getClient().getUDPPort());
     }
 
     private void handle(LeaveRoom message) {
@@ -174,19 +175,32 @@ public class Loop {
     }
 
     private void handle(SendMessage message) {
-        //To change body of created methods use File | Settings | File Templates.
+
     }
 
     private void handle(JoinRoom message) {
         Client.find(message.getClient()).setCurrentRoom(Room.find(message.getRoom()));
+        Room.find(message.getRoom()).addClient(Client.find(message.getClient()));
+        Model.getModel().updateGUI();
     }
 
     //Functions
     public void sendMessage(String message) {
+        MessageFactory.createSendMessage(message);
+        for(Client:client )
     }
 
     public void createRoom(Room room) {
-        RoomCreation message = MessageFactory.createRoomCreationMessage(room);
-        sendMulticast(message);
+
+        Model.getModel().addRoom(room);
+        sendMulticast(MessageFactory.createRoomCreationMessage(room));
+        Model.getModel().updateGUI();
+    }
+
+    public void joinRoom(Room room) {
+
+        Model.getModel().setCurrentRoom(room);
+        sendMulticast(MessageFactory.createJoinRoomMsg(room));
+        Model.getModel().updateGUI();
     }
 }

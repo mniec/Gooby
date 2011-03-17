@@ -20,6 +20,6 @@ public class RoomCreation extends Message{
 
     @Override
     public String toString(){
-        return "RoomCreated: "+room.toString();
+        return getClient().toString() + " created room " + getRoom().toString();
     }
 }

@@ -1,6 +1,8 @@
 package pl.edu.agh.student.nimichal.Gooby.Model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Author: Michal Niec
@@ -9,13 +11,13 @@ import java.util.Arrays;
  */
 public class Room {
     private String name;
-    transient private Client[] clients;
+    transient private Collection<Client> clients = new ArrayList<Client>();
 
-    public Client[] getClients() {
+    public Collection<Client> getClients() {
         return clients;
     }
 
-    public void setClients(Client[] clients) {
+    public void setClients(Collection<Client> clients) {
         this.clients = clients;
     }
 
@@ -29,7 +31,7 @@ public class Room {
 
     @Override
     public String toString(){
-        return name+"("+clients.length+")";
+        return name;
     }
 
     @Override
@@ -44,13 +46,6 @@ public class Room {
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (clients != null ? Arrays.hashCode(clients) : 0);
-        return result;
-    }
-
     public static Room find(Room room){
            for(Room ro:Model.getModel().getRooms()) {
                if(ro.equals(room))
@@ -59,4 +54,8 @@ public class Room {
            return null;
        }
 
+
+    public void addClient(Client client) {
+        this.getClients().add(client);
+    }
 }

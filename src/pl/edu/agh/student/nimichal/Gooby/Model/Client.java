@@ -1,5 +1,8 @@
 package pl.edu.agh.student.nimichal.Gooby.Model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Author: Michal Niec
  * Date: 16.03.11
@@ -8,14 +11,16 @@ package pl.edu.agh.student.nimichal.Gooby.Model;
 public class Client extends BaseDataObject {
     private String name;
     private String ipAddress;
-    private Room[] rooms;
+    private int port;
+
+    private Collection<Room> rooms = new ArrayList<Room>();
     private Room currentRoom;
 
-    public Room[] getRooms() {
+    public Collection<Room> getRooms() {
         return rooms;
     }
 
-    public void setRooms(Room[] rooms) {
+    public void setRooms(Collection<Room> rooms) {
         this.rooms = rooms;
     }
 
@@ -43,6 +48,22 @@ public class Client extends BaseDataObject {
         this.currentRoom = currentRoom;
     }
 
+    public int getUDPPort() {
+        return port;
+    }
+
+    public void setUDPPort(int port) {
+        this.port = port;
+    }
+
+    public static Client find(Client client) {
+        for (Client cl : Model.getModel().getClients()) {
+            if (cl.equals(client))
+                return cl;
+        }
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,15 +82,10 @@ public class Client extends BaseDataObject {
     }
 
     @Override
-    public String toString(){
-        return name+":"+ipAddress;
+    public String toString() {
+        return name + ":" + ipAddress;
     }
 
-    public static Client find(Client client){
-        for(Client cl:Model.getModel().getClients()) {
-            if(cl.equals(client))
-                return cl;
-        }
-        return null;
-    }
+
+
 }

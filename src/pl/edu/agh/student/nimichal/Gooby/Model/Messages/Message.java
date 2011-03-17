@@ -31,9 +31,7 @@ public abstract class Message<T> extends BaseDataObject {
         return datagramPacket;
     }
 
-    /* public T deserialize(DatagramPacket packet) {
-        return new Message<T>();
-    }*/
+
 
 
 

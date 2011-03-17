@@ -1,13 +1,13 @@
-name: Franek
+name: Franek2
 
 localIP: 127.0.0.1
-multicastIP: 224.1.1.54
+multicastIP: 224.0.0.1
 
 multicastTTL: 1
 
-udpPort: 7071
-multicastPort: 8081
-tcpPort: 9091
+udpPort: 7070
+multicastPort: 7897
+tcpPort: 9090
 
 logConfig: logger2.conf
 
