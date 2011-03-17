@@ -1,4 +1,4 @@
-package pl.edu.agh.student.nimichal;
+package pl.edu.agh.student.nimichal.Gooby;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -28,6 +28,7 @@ public class Settings {
     private String logFile;
     private int packetLength;
     private int multicastTTL;
+    private int timeToReceiveResponse;
 
     private static Settings instance;
     private static String filename = "config.yml";
@@ -126,5 +127,11 @@ public class Settings {
         this.multicastTTL = multicastTTL;
     }
 
+    public int getTimeToReceiveResponse() {
+        return timeToReceiveResponse;
+    }
 
+    public void setTimeToReceiveResponse(int timeToReceiveResponse) {
+        this.timeToReceiveResponse = timeToReceiveResponse;
+    }
 }

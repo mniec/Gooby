@@ -1,22 +1,20 @@
-package pl.edu.agh.student.nimichal.DTO;
-
-import pl.edu.agh.student.nimichal.BaseDataObject;
+package pl.edu.agh.student.nimichal.Gooby.Model;
 
 /**
  * Author: Michal Niec
  * Date: 16.03.11
  * Time: 23:52
  */
-public class Client extends BaseDataObject{
+public class Client extends pl.edu.agh.student.nimichal.Model.BaseDataObject {
     private String name;
     private String ipAddress;
-    private Room[] rooms;
+    private pl.edu.agh.student.nimichal.Model.Room[] rooms;
 
-    public Room[] getRooms() {
+    public pl.edu.agh.student.nimichal.Model.Room[] getRooms() {
         return rooms;
     }
 
-    public void setRooms(Room[] rooms) {
+    public void setRooms(pl.edu.agh.student.nimichal.Model.Room[] rooms) {
         this.rooms = rooms;
     }
 
@@ -34,5 +32,10 @@ public class Client extends BaseDataObject{
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    @Override
+    public String toString(){
+        return name+":"+ipAddress;
     }
 }

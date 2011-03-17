@@ -1,9 +1,15 @@
-package pl.edu.agh.student.nimichal;
+package pl.edu.agh.student.nimichal.Gooby;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import pl.edu.agh.student.nimichal.Gooby.Model.Client;
+import pl.edu.agh.student.nimichal.Gooby.Model.Model;
+import pl.edu.agh.student.nimichal.Gooby.Model.Room;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -13,18 +19,19 @@ import java.awt.event.KeyListener;
  * Date: 16.03.11
  * Time: 15:44
  */
-public class Gooby implements KeyListener {
+public class Gooby implements KeyListener, ChatListener {
 
     static Logger logger = Logger.getLogger(Gooby.class);
 
     private JList messageList;
     private JPanel mainPanel;
     private JTextField messageField;
-    private JList roomsList;
     private JTextField roomField;
+    private JTree roomsTree;
+    private TreeNode rootNode = new DefaultMutableTreeNode("Rooms");
+    private DefaultTreeModel roomsTreeModel = new DefaultTreeModel(rootNode);
 
     private DefaultListModel messagesListModel = new DefaultListModel();
-    private DefaultListModel roomsListModel = new DefaultListModel();
 
     public static void main(String[] args) {
         try {
@@ -37,6 +44,7 @@ public class Gooby implements KeyListener {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
             frame.setVisible(true);
+
 
             new Loop().start();
         } catch (HeadlessException e) {
@@ -52,7 +60,8 @@ public class Gooby implements KeyListener {
     private void createUIComponents() {
         //listeners
         this.messageField.addKeyListener(this);
-        this.roomsList.addKeyListener(this);
+        this.roomField.addKeyListener(this);
+        Model.Model().addChatListener(this);
 
         //mesages List!
         this.messageList.setModel(messagesListModel);
@@ -60,9 +69,7 @@ public class Gooby implements KeyListener {
         this.messageList.setSelectedIndex(0);
 
         //roomsList!
-        this.roomsList.setModel(roomsListModel);
-        this.roomsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.roomsList.setSelectedIndex(0);
+        this.roomsTree.setModel(roomsTreeModel);
     }
 
 
@@ -79,7 +86,23 @@ public class Gooby implements KeyListener {
             String message = messageField.getText();
             JLabel label = new JLabel(message);
             ((DefaultListModel) messageList.getModel()).addElement(message);
-
         }
+    }
+
+    public void updateData() {
+        for (Room room : Model.Model().getRooms()) {
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(room);
+            for (Client client : room.getClients()) {
+                node.add(new DefaultMutableTreeNode(client));
+            }
+        }
+    }
+
+    public void ClientsChanged() {
+        updateData();
+    }
+
+    public void RoomsChanged() {
+        updateData();
     }
 }
